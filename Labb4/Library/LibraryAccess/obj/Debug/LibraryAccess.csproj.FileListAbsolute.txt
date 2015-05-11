@@ -1,0 +1,10 @@
+E:\Skolarbete\Objektorienterad programmering\Github\SQL\Labb4\Library\LibraryAccess\bin\Debug\LibraryAccess.dll.config
+E:\Skolarbete\Objektorienterad programmering\Github\SQL\Labb4\Library\LibraryAccess\bin\Debug\LibraryAccess.dll
+E:\Skolarbete\Objektorienterad programmering\Github\SQL\Labb4\Library\LibraryAccess\bin\Debug\LibraryAccess.pdb
+E:\Skolarbete\Objektorienterad programmering\Github\SQL\Labb4\Library\LibraryAccess\bin\Debug\EntityFramework.dll
+E:\Skolarbete\Objektorienterad programmering\Github\SQL\Labb4\Library\LibraryAccess\bin\Debug\EntityFramework.SqlServer.dll
+E:\Skolarbete\Objektorienterad programmering\Github\SQL\Labb4\Library\LibraryAccess\bin\Debug\EntityFramework.xml
+E:\Skolarbete\Objektorienterad programmering\Github\SQL\Labb4\Library\LibraryAccess\bin\Debug\EntityFramework.SqlServer.xml
+E:\Skolarbete\Objektorienterad programmering\Github\SQL\Labb4\Library\LibraryAccess\obj\Debug\LibraryAccess.dll
+E:\Skolarbete\Objektorienterad programmering\Github\SQL\Labb4\Library\LibraryAccess\obj\Debug\LibraryAccess.pdb
+E:\Skolarbete\Objektorienterad programmering\Github\SQL\Labb4\Library\LibraryAccess\obj\Debug\LibraryAccess.csprojResolveAssemblyReference.cache

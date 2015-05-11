@@ -1,0 +1,465 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BibliotekDatabasModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AuthorList">
+          <Key>
+            <PropertyRef Name="AuthorId" />
+          </Key>
+          <Property Name="AuthorId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="YearOfBirth" Type="date" Nullable="false" />
+          <Property Name="YearOfDeath" Type="date" />
+          <Property Name="CountryOfOrigin" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="BookList">
+          <Key>
+            <PropertyRef Name="BookId" />
+          </Key>
+          <Property Name="BookId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AuthorId" Type="int" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ReleaseYear" Type="date" Nullable="false" />
+          <Property Name="Genre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Language" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CurrentLoans">
+          <Key>
+            <PropertyRef Name="LoanId" />
+          </Key>
+          <Property Name="LoanId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerId" Type="int" Nullable="false" />
+          <Property Name="CopyId" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="IsReturned" Type="bit" Nullable="false" />
+          <Property Name="DueDate" Type="date" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Name="CustomerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Adress" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="PhoneNumber" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Gender" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UniqueBookCopy">
+          <Key>
+            <PropertyRef Name="CopyId" />
+          </Key>
+          <Property Name="CopyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PurchasePrice" Type="money" Nullable="false" />
+          <Property Name="PurchaseDate" Type="date" />
+          <Property Name="BookId" Type="int" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'BibliotekDatabas.dbo.vBookCustomer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vBookCustomer">
+          <Key>
+            <PropertyRef Name="Title" />
+            <PropertyRef Name="Customer" />
+            <PropertyRef Name="FirstName" />
+            <PropertyRef Name="LastName" />
+            <PropertyRef Name="BookId" />
+          </Key>
+          <Property Name="Title" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Customer" Type="varchar" MaxLength="101" Nullable="false" />
+          <Property Name="DueDate" Type="date" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="BookId" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'BibliotekDatabas.dbo.vBooksAvailable' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vBooksAvailable">
+          <Key>
+            <PropertyRef Name="Title" />
+          </Key>
+          <Property Name="Title" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="CopiesAvailable" Type="int" />
+        </EntityType>
+        <Association Name="FK_BookList_AuthorId">
+          <End Role="AuthorList" Type="Self.AuthorList" Multiplicity="1" />
+          <End Role="BookList" Type="Self.BookList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AuthorList">
+              <PropertyRef Name="AuthorId" />
+            </Principal>
+            <Dependent Role="BookList">
+              <PropertyRef Name="AuthorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Loan_CustomerId">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="CurrentLoans" Type="Self.CurrentLoans" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerId" />
+            </Principal>
+            <Dependent Role="CurrentLoans">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Loan_UniqueBookCopy_CopyId">
+          <End Role="UniqueBookCopy" Type="Self.UniqueBookCopy" Multiplicity="1" />
+          <End Role="CurrentLoans" Type="Self.CurrentLoans" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UniqueBookCopy">
+              <PropertyRef Name="CopyId" />
+            </Principal>
+            <Dependent Role="CurrentLoans">
+              <PropertyRef Name="CopyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UniqueBookCopy_BookId">
+          <End Role="BookList" Type="Self.BookList" Multiplicity="1" />
+          <End Role="UniqueBookCopy" Type="Self.UniqueBookCopy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BookList">
+              <PropertyRef Name="BookId" />
+            </Principal>
+            <Dependent Role="UniqueBookCopy">
+              <PropertyRef Name="BookId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="usp_Add_Loan" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CopyId" Type="int" Mode="In" />
+          <Parameter Name="CustomerId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="usp_Return_Book" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CopyId" Type="int" Mode="In" />
+          <Parameter Name="CustomerId" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="BibliotekDatabasModelStoreContainer">
+          <EntitySet Name="AuthorList" EntityType="Self.AuthorList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BookList" EntityType="Self.BookList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CurrentLoans" EntityType="Self.CurrentLoans" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UniqueBookCopy" EntityType="Self.UniqueBookCopy" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vBookCustomer" EntityType="Self.vBookCustomer" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vBookCustomer].[Title] AS [Title], 
+    [vBookCustomer].[Customer] AS [Customer], 
+    [vBookCustomer].[DueDate] AS [DueDate], 
+    [vBookCustomer].[FirstName] AS [FirstName], 
+    [vBookCustomer].[LastName] AS [LastName], 
+    [vBookCustomer].[BookId] AS [BookId]
+    FROM [dbo].[vBookCustomer] AS [vBookCustomer]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vBooksAvailable" EntityType="Self.vBooksAvailable" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [vBooksAvailable].[Title] AS [Title], 
+    [vBooksAvailable].[CopiesAvailable] AS [CopiesAvailable]
+    FROM [dbo].[vBooksAvailable] AS [vBooksAvailable]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_BookList_AuthorId" Association="Self.FK_BookList_AuthorId">
+            <End Role="AuthorList" EntitySet="AuthorList" />
+            <End Role="BookList" EntitySet="BookList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Loan_CustomerId" Association="Self.FK_Loan_CustomerId">
+            <End Role="Customer" EntitySet="Customer" />
+            <End Role="CurrentLoans" EntitySet="CurrentLoans" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Loan_UniqueBookCopy_CopyId" Association="Self.FK_Loan_UniqueBookCopy_CopyId">
+            <End Role="UniqueBookCopy" EntitySet="UniqueBookCopy" />
+            <End Role="CurrentLoans" EntitySet="CurrentLoans" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UniqueBookCopy_BookId" Association="Self.FK_UniqueBookCopy_BookId">
+            <End Role="BookList" EntitySet="BookList" />
+            <End Role="UniqueBookCopy" EntitySet="UniqueBookCopy" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BibliotekDatabasModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AuthorList">
+          <Key>
+            <PropertyRef Name="AuthorId" />
+          </Key>
+          <Property Name="AuthorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="YearOfBirth" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="YearOfDeath" Type="DateTime" Precision="0" />
+          <Property Name="CountryOfOrigin" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="BookLists" Relationship="Self.FK_BookList_AuthorId" FromRole="AuthorList" ToRole="BookList" />
+        </EntityType>
+        <EntityType Name="BookList">
+          <Key>
+            <PropertyRef Name="BookId" />
+          </Key>
+          <Property Name="BookId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AuthorId" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ReleaseYear" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Genre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Language" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="AuthorList" Relationship="Self.FK_BookList_AuthorId" FromRole="BookList" ToRole="AuthorList" />
+          <NavigationProperty Name="UniqueBookCopies" Relationship="Self.FK_UniqueBookCopy_BookId" FromRole="BookList" ToRole="UniqueBookCopy" />
+        </EntityType>
+        <EntityType Name="CurrentLoan">
+          <Key>
+            <PropertyRef Name="LoanId" />
+          </Key>
+          <Property Name="LoanId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerId" Type="Int32" Nullable="false" />
+          <Property Name="CopyId" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DueDate" Type="DateTime" annotation:StoreGeneratedPattern="Computed" Precision="0" />
+          <NavigationProperty Name="Customer" Relationship="Self.FK_Loan_CustomerId" FromRole="CurrentLoans" ToRole="Customer" />
+          <NavigationProperty Name="UniqueBookCopy" Relationship="Self.FK_Loan_UniqueBookCopy_CopyId" FromRole="CurrentLoans" ToRole="UniqueBookCopy" />
+          <Property Name="IsReturned" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Name="CustomerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Adress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Gender" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="CurrentLoans" Relationship="Self.FK_Loan_CustomerId" FromRole="Customer" ToRole="CurrentLoans" />
+        </EntityType>
+        <EntityType Name="UniqueBookCopy">
+          <Key>
+            <PropertyRef Name="CopyId" />
+          </Key>
+          <Property Name="CopyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PurchasePrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="PurchaseDate" Type="DateTime" Precision="0" />
+          <Property Name="BookId" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="BookList" Relationship="Self.FK_UniqueBookCopy_BookId" FromRole="UniqueBookCopy" ToRole="BookList" />
+          <NavigationProperty Name="CurrentLoans" Relationship="Self.FK_Loan_UniqueBookCopy_CopyId" FromRole="UniqueBookCopy" ToRole="CurrentLoans" />
+        </EntityType>
+        <EntityType Name="vBookCustomer">
+          <Key>
+            <PropertyRef Name="Title" />
+            <PropertyRef Name="Customer" />
+            <PropertyRef Name="BookId" />
+            <PropertyRef Name="FirstName" />
+            <PropertyRef Name="LastName" />
+          </Key>
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Customer" Type="String" MaxLength="101" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DueDate" Type="DateTime" Precision="0" />
+          <Property Name="BookId" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="vBooksAvailable">
+          <Key>
+            <PropertyRef Name="Title" />
+          </Key>
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CopiesAvailable" Type="Int32" />
+        </EntityType>
+        <Association Name="FK_BookList_AuthorId">
+          <End Role="AuthorList" Type="Self.AuthorList" Multiplicity="1" />
+          <End Role="BookList" Type="Self.BookList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AuthorList">
+              <PropertyRef Name="AuthorId" />
+            </Principal>
+            <Dependent Role="BookList">
+              <PropertyRef Name="AuthorId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UniqueBookCopy_BookId">
+          <End Role="BookList" Type="Self.BookList" Multiplicity="1" />
+          <End Role="UniqueBookCopy" Type="Self.UniqueBookCopy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="BookList">
+              <PropertyRef Name="BookId" />
+            </Principal>
+            <Dependent Role="UniqueBookCopy">
+              <PropertyRef Name="BookId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Loan_CustomerId">
+          <End Role="Customer" Type="Self.Customer" Multiplicity="1" />
+          <End Role="CurrentLoans" Type="Self.CurrentLoan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Customer">
+              <PropertyRef Name="CustomerId" />
+            </Principal>
+            <Dependent Role="CurrentLoans">
+              <PropertyRef Name="CustomerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Loan_UniqueBookCopy_CopyId">
+          <End Role="UniqueBookCopy" Type="Self.UniqueBookCopy" Multiplicity="1" />
+          <End Role="CurrentLoans" Type="Self.CurrentLoan" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UniqueBookCopy">
+              <PropertyRef Name="CopyId" />
+            </Principal>
+            <Dependent Role="CurrentLoans">
+              <PropertyRef Name="CopyId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BibliotekDatabasEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AuthorLists" EntityType="Self.AuthorList" />
+          <EntitySet Name="BookLists" EntityType="Self.BookList" />
+          <EntitySet Name="CurrentLoans" EntityType="Self.CurrentLoan" />
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="UniqueBookCopies" EntityType="Self.UniqueBookCopy" />
+          <EntitySet Name="vBookCustomers" EntityType="Self.vBookCustomer" />
+          <EntitySet Name="vBooksAvailables" EntityType="Self.vBooksAvailable" />
+          <AssociationSet Name="FK_BookList_AuthorId" Association="Self.FK_BookList_AuthorId">
+            <End Role="AuthorList" EntitySet="AuthorLists" />
+            <End Role="BookList" EntitySet="BookLists" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UniqueBookCopy_BookId" Association="Self.FK_UniqueBookCopy_BookId">
+            <End Role="BookList" EntitySet="BookLists" />
+            <End Role="UniqueBookCopy" EntitySet="UniqueBookCopies" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Loan_CustomerId" Association="Self.FK_Loan_CustomerId">
+            <End Role="Customer" EntitySet="Customers" />
+            <End Role="CurrentLoans" EntitySet="CurrentLoans" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Loan_UniqueBookCopy_CopyId" Association="Self.FK_Loan_UniqueBookCopy_CopyId">
+            <End Role="UniqueBookCopy" EntitySet="UniqueBookCopies" />
+            <End Role="CurrentLoans" EntitySet="CurrentLoans" />
+          </AssociationSet>
+          <FunctionImport Name="usp_Add_Loan" ReturnType="Collection(String)">
+            <Parameter Name="CopyId" Mode="In" Type="Int32" />
+            <Parameter Name="CustomerId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="usp_Return_Book" ReturnType="Collection(String)">
+          <Parameter Name="CopyId" Mode="In" Type="Int32" />
+            <Parameter Name="CustomerId" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BibliotekDatabasModelStoreContainer" CdmEntityContainer="BibliotekDatabasEntities">
+          <EntitySetMapping Name="AuthorLists">
+            <EntityTypeMapping TypeName="BibliotekDatabasModel.AuthorList">
+              <MappingFragment StoreEntitySet="AuthorList">
+                <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="YearOfBirth" ColumnName="YearOfBirth" />
+                <ScalarProperty Name="YearOfDeath" ColumnName="YearOfDeath" />
+                <ScalarProperty Name="CountryOfOrigin" ColumnName="CountryOfOrigin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BookLists">
+            <EntityTypeMapping TypeName="BibliotekDatabasModel.BookList">
+              <MappingFragment StoreEntitySet="BookList">
+                <ScalarProperty Name="BookId" ColumnName="BookId" />
+                <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ReleaseYear" ColumnName="ReleaseYear" />
+                <ScalarProperty Name="Genre" ColumnName="Genre" />
+                <ScalarProperty Name="Language" ColumnName="Language" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CurrentLoans">
+            <EntityTypeMapping TypeName="BibliotekDatabasModel.CurrentLoan">
+              <MappingFragment StoreEntitySet="CurrentLoans">
+                <ScalarProperty Name="IsReturned" ColumnName="IsReturned" />
+                <ScalarProperty Name="LoanId" ColumnName="LoanId" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="CopyId" ColumnName="CopyId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="BibliotekDatabasModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Adress" ColumnName="Adress" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UniqueBookCopies">
+            <EntityTypeMapping TypeName="BibliotekDatabasModel.UniqueBookCopy">
+              <MappingFragment StoreEntitySet="UniqueBookCopy">
+                <ScalarProperty Name="CopyId" ColumnName="CopyId" />
+                <ScalarProperty Name="PurchasePrice" ColumnName="PurchasePrice" />
+                <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
+                <ScalarProperty Name="BookId" ColumnName="BookId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vBookCustomers">
+            <EntityTypeMapping TypeName="BibliotekDatabasModel.vBookCustomer">
+              <MappingFragment StoreEntitySet="vBookCustomer">
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Customer" ColumnName="Customer" />
+                <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+                <ScalarProperty Name="BookId" ColumnName="BookId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vBooksAvailables">
+            <EntityTypeMapping TypeName="BibliotekDatabasModel.vBooksAvailable">
+              <MappingFragment StoreEntitySet="vBooksAvailable">
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CopiesAvailable" ColumnName="CopiesAvailable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="usp_Add_Loan" FunctionName="BibliotekDatabasModel.Store.usp_Add_Loan" />
+          <FunctionImportMapping FunctionImportName="usp_Return_Book" FunctionName="BibliotekDatabasModel.Store.usp_Return_Book" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

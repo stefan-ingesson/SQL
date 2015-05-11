@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="BibliotekDatabasModelStoreContainer" CdmEntityContainer="BibliotekDatabasEntities">
+    <EntitySetMapping Name="AuthorLists">
+      <EntityTypeMapping TypeName="BibliotekDatabasModel.AuthorList">
+        <MappingFragment StoreEntitySet="AuthorList">
+          <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="YearOfBirth" ColumnName="YearOfBirth" />
+          <ScalarProperty Name="YearOfDeath" ColumnName="YearOfDeath" />
+          <ScalarProperty Name="CountryOfOrigin" ColumnName="CountryOfOrigin" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BookLists">
+      <EntityTypeMapping TypeName="BibliotekDatabasModel.BookList">
+        <MappingFragment StoreEntitySet="BookList">
+          <ScalarProperty Name="BookId" ColumnName="BookId" />
+          <ScalarProperty Name="AuthorId" ColumnName="AuthorId" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="ReleaseYear" ColumnName="ReleaseYear" />
+          <ScalarProperty Name="Genre" ColumnName="Genre" />
+          <ScalarProperty Name="Language" ColumnName="Language" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CurrentLoans">
+      <EntityTypeMapping TypeName="BibliotekDatabasModel.CurrentLoan">
+        <MappingFragment StoreEntitySet="CurrentLoans">
+          <ScalarProperty Name="IsReturned" ColumnName="IsReturned" />
+          <ScalarProperty Name="LoanId" ColumnName="LoanId" />
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="CopyId" ColumnName="CopyId" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Customers">
+      <EntityTypeMapping TypeName="BibliotekDatabasModel.Customer">
+        <MappingFragment StoreEntitySet="Customer">
+          <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Adress" ColumnName="Adress" />
+          <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UniqueBookCopies">
+      <EntityTypeMapping TypeName="BibliotekDatabasModel.UniqueBookCopy">
+        <MappingFragment StoreEntitySet="UniqueBookCopy">
+          <ScalarProperty Name="CopyId" ColumnName="CopyId" />
+          <ScalarProperty Name="PurchasePrice" ColumnName="PurchasePrice" />
+          <ScalarProperty Name="PurchaseDate" ColumnName="PurchaseDate" />
+          <ScalarProperty Name="BookId" ColumnName="BookId" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vBookCustomers">
+      <EntityTypeMapping TypeName="BibliotekDatabasModel.vBookCustomer">
+        <MappingFragment StoreEntitySet="vBookCustomer">
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Customer" ColumnName="Customer" />
+          <ScalarProperty Name="DueDate" ColumnName="DueDate" />
+          <ScalarProperty Name="BookId" ColumnName="BookId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vBooksAvailables">
+      <EntityTypeMapping TypeName="BibliotekDatabasModel.vBooksAvailable">
+        <MappingFragment StoreEntitySet="vBooksAvailable">
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="CopiesAvailable" ColumnName="CopiesAvailable" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="usp_Add_Loan" FunctionName="BibliotekDatabasModel.Store.usp_Add_Loan" />
+    <FunctionImportMapping FunctionImportName="usp_Return_Book" FunctionName="BibliotekDatabasModel.Store.usp_Return_Book" />
+  </EntityContainerMapping>
+</Mapping>
